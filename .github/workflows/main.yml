@@ -11,9 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Install Tesseract
-        run: sudo apt install tesseract-ocr
+        run: sudo apt install tesseract-ocr && sudo apt install exiftool
       - name: Extract text from JPEG images
         run: for file in markdown/*.jpg; do tesseract $file "${file%.jpg}"; done
+      - name: Extract metadata from JPEG images
+        run: for file in markdown/*.jpg; do exiftool $file > "${file%.jpg}.exif"; done
       - name: Commit output files
         uses: EndBug/add-and-commit@v9
         with:
